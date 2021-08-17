@@ -1,6 +1,7 @@
 import torch
 import random
 import transformers
+import pandas as pd
 
 def generate_next_sentence(text):
     
@@ -44,7 +45,7 @@ def mask_for_mlm(inputs):
     
     return(inputs)
 
-def generate_inputs_from_text(text):
+def generate_inputs_from_text(tokenizer, text):
     
     sentence_a, sentence_b, label = generate_next_sentence(text)
     
@@ -67,16 +68,16 @@ class CorpusDataset(torch.utils.data.Dataset):
         return len(self.encodings.input_ids)
     
 
-def train_Bert4PT(model, text):
+def train_Bert4PT(model, tokenizer, text, batch_size=4):
     
-    inputs = generate_inputs_from_text(text)
+    inputs = generate_inputs_from_text(tokenizer, text)
     dataset = CorpusDataset(inputs)
     
     training_args = transformers.TrainingArguments(
         output_dir='./results',          # output directory
         num_train_epochs=3,              # total # of training epochs
-        per_device_train_batch_size=16,  # batch size per device during training
-        per_device_eval_batch_size=64,   # batch size for evaluation
+        per_device_train_batch_size=batch_size,  # batch size per device during training
+        per_device_eval_batch_size=batch_size,   # batch size for evaluation 
         warmup_steps=500,                # number of warmup steps for learning rate scheduler
         weight_decay=0.01,               # strength of weight decay
         logging_dir='./logs')            # directory for storing logs
@@ -87,5 +88,31 @@ def train_Bert4PT(model, text):
         train_dataset=dataset,               # training dataset
         eval_dataset=dataset)                # evaluation dataset
     
+    trainer.train()
     
-    return(model)    
+    
+    return(model)
+
+
+def get_text_from_files(files_path):
+    
+    list_dfs = []
+    for file in files_path:
+        with open(file) as f:
+            lines = f.readlines()
+
+        lines = [line.rstrip('\n') for line in lines]
+        lines = [line for line in lines if line != '']
+
+        df_transcription = pd.DataFrame()
+        df_transcription['line'] = lines
+        df_transcription['next_line'] = df_transcription['line'].shift(-1).fillna(df_transcription['line'])
+        list_dfs.append(df_transcription)
+
+    df_transcriptions = pd.concat(list_dfs).dropna()
+
+    text = {}
+    text['sentence'] = df_transcriptions['line'].astype(str).values
+    text['next_sentence'] = df_transcriptions['next_line'].astype(str).values
+
+    return(text)
