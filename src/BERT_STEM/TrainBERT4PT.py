@@ -72,21 +72,29 @@ def train_Bert4PT(model, tokenizer, text, batch_size=4):
     
     inputs = generate_inputs_from_text(tokenizer, text)
     dataset = CorpusDataset(inputs)
+    early_stopping = transformers.EarlyStoppingCallback(early_stopping_patience= 5)
     
     training_args = transformers.TrainingArguments(
-        output_dir='./results',          # output directory
+        output_dir='./results',       # output directory
         num_train_epochs=3,              # total # of training epochs
         per_device_train_batch_size=batch_size,  # batch size per device during training
         per_device_eval_batch_size=batch_size,   # batch size for evaluation 
         warmup_steps=500,                # number of warmup steps for learning rate scheduler
         weight_decay=0.01,               # strength of weight decay
-        logging_dir='./logs')            # directory for storing logs
+        logging_dir='./logs',            # directory for storing logs
+        load_best_model_at_end=True,
+        evaluation_strategy="steps",
+        eval_steps=10000,
+        save_steps=10000)            
 
     trainer = transformers.Trainer(
         model=model,                         # the instantiated Transformers model to be trained
         args=training_args,                  # training arguments, defined above
         train_dataset=dataset,               # training dataset
-        eval_dataset=dataset)                # evaluation dataset
+        eval_dataset=dataset,                # evaluation dataset
+        callbacks = [early_stopping])        
+    
+    trainer.place_model_on_device = True
     
     trainer.train()
     

@@ -1,0 +1,8 @@
+LICENSE
+README.md
+pyproject.toml
+setup.cfg
+BERT_STEM/bertstem.egg-info/PKG-INFO
+BERT_STEM/bertstem.egg-info/SOURCES.txt
+BERT_STEM/bertstem.egg-info/dependency_links.txt
+BERT_STEM/bertstem.egg-info/top_level.txt
