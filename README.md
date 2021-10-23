@@ -12,7 +12,7 @@ pip install bertstem
 
 ## Quickstart
 
-To use it::
+To use it:
 
 ```python
 from BERT_STEM.Encode import *
