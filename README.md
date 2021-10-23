@@ -23,7 +23,9 @@ import transformers
 model = transformers.BertModel.from_pretrained("dccuchile/bert-base-spanish-wwm-uncased")
 
 # Download spanish tokenizer:
-tokenizer = transformers.BertTokenizerFast.from_pretrained("dccuchile/bert-base-spanish-wwm-uncased",do_lower_case=True, add_special_tokens = False)
+tokenizer = transformers.BertTokenizerFast.from_pretrained("dccuchile/bert-base-spanish-wwm-uncased",
+                                                            do_lower_case=True, 
+                                                            add_special_tokens = False)
 
 # Example dataframe with text in spanish
 data = {'col_1': [3, 2, 1], 

@@ -1,12 +1,12 @@
 Metadata-Version: 2.1
 Name: bertstem
-Version: 0.0.4
-Summary: A small example package
-Home-page: https://github.com/pypa/sampleproject
+Version: 0.0.5
+Summary: BERT model fine-tuned on chilean STEM lessons
+Home-page: https://github.com/pabloveazul/BERT-STEM
 Author: Pablo Uribe
 Author-email: pablo.uribe@student.ecp.fr
 License: UNKNOWN
-Project-URL: Bug Tracker, https://github.com/pypa/sampleproject/issues
+Project-URL: Bug Tracker, https://github.com/pabloveazul/BERT-STEM
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
@@ -16,4 +16,40 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 
 # BERT-STEM
+
+BERT model fine-tuned on Science Technology Engineering and Mathematics (STEM) lessons.
+
+## Install:
+
+To install from pip:
+
+```
+pip install bertstem
+```
+
+## Quickstart
+
+To use it:
+
+```python
+from BERT_STEM.Encode import *
+import pandas as pd
+import transformers
+
+# Download spanish BERT:
+model = transformers.BertModel.from_pretrained("dccuchile/bert-base-spanish-wwm-uncased")
+
+# Download spanish tokenizer:
+tokenizer = transformers.BertTokenizerFast.from_pretrained("dccuchile/bert-base-spanish-wwm-uncased",do_lower_case=True, add_special_tokens = False)
+
+# Example dataframe with text in spanish
+data = {'col_1': [3, 2, 1], 
+        'col_2': ['hola como estan', 'alumnos queridos', 'vamos a hablar de matematicas']}
+        
+df = pd.DataFrame.from_dict(data)
+
+# Encode sentences using spanish BERT:
+sentence_encoder(df, model, tokenizer, column = 'col_2', encoding = 'sum')
+```
+
 
