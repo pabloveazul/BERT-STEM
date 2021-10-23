@@ -14,6 +14,6 @@ pip install bertstem
 
 To use it:
 
-```
+```python
 from BERT_STEM import Encode
 ```
