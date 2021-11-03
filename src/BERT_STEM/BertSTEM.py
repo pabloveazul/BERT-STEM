@@ -8,7 +8,8 @@ from BERT_STEM.TrainBERT4PT import *
 
 class BertSTEM:
     
-    def __init__(self, model_name = None)
+    def __init__(self, model_name = None):
+        
         if model_name is not None:
             self.model_name = model_name
 
@@ -17,7 +18,7 @@ class BertSTEM:
 
         self._model = transformers.BertModel.from_pretrained(self.model_name)
 
-        self._tokenizer = transformers.BertTokenizerFast.from_pretrained(self.model_name,
+        self._tokenizer = transformers.BertTokenizerFast.from_pretrained("dccuchile/bert-base-spanish-wwm-uncased",
                                                                          do_lower_case = True,
                                                                          add_special_tokens = False)
 
@@ -25,9 +26,13 @@ class BertSTEM:
 
         return(sentence_encoder(df, self._model, self._tokenizer, column, encoding))
 
-    def _train_bert_for_pretraining(self, text, checkpoint = self.model_name):
+    def _train_bert_for_pretraining(self, text, checkpoint):
         
         model = transformers.BertForPreTraining.from_pretrained(checkpoint)
+        
+        tokenizer = transformers.BertTokenizerFast.from_pretrained("dccuchile/bert-base-spanish-wwm-uncased",
+                                                                   do_lower_case = True,
+                                                                   add_special_tokens = False)
 
         train_Bert4PT(model, tokenizer, text)
 

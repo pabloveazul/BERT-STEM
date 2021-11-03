@@ -19,8 +19,8 @@ from BERT_STEM.Encode import *
 import pandas as pd
 import transformers
 
-# Download spanish BERT:
-model = transformers.BertModel.from_pretrained("dccuchile/bert-base-spanish-wwm-uncased")
+# Download spanish BERTSTEM:
+model = transformers.BertModel.from_pretrained("pablouribe/bertstem")
 
 # Download spanish tokenizer:
 tokenizer = transformers.BertTokenizerFast.from_pretrained("dccuchile/bert-base-spanish-wwm-uncased",
