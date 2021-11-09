@@ -12,7 +12,27 @@ pip install bertstem
 
 ## Quickstart
 
-To use it:
+To encode sentences and get embedding matrix for embedding layers:
+
+```python
+from BERT_STEM.BertSTEM import *
+bert = BertSTEM()
+
+# Example dataframe with text in spanish
+data = {'col_1': [3, 2, 1], 
+'col_2': ['hola como estan', 'alumnos queridos', 'vamos a hablar de matematicas']}
+
+df = pd.DataFrame.from_dict(data)
+
+# Encode sentences using BertSTEM:
+bert._encode_df(df, column='col_2', encoding='sum')
+
+# Get embedding matrix:
+
+embedding_matrix = bert.get_embedding_matrix()
+```
+
+To use it from HuggingFace:
 
 ```python
 from BERT_STEM.Encode import *
@@ -33,6 +53,8 @@ data = {'col_1': [3, 2, 1],
         
 df = pd.DataFrame.from_dict(data)
 
-# Encode sentences using spanish BERT:
+# Encode sentences using BertSTEM:
 sentence_encoder(df, model, tokenizer, column = 'col_2', encoding = 'sum')
 ```
+
+
