@@ -12,7 +12,7 @@ pip install bertstem
 
 ## Quickstart
 
-To encode sentences and get embedding matrix for embedding layers:
+To encode sentences :
 
 ```python
 from BERT_STEM.BertSTEM import *
@@ -27,10 +27,26 @@ df = pd.DataFrame.from_dict(data)
 # Encode sentences using BertSTEM:
 bert._encode_df(df, column='col_2', encoding='sum')
 
-# Get embedding matrix:
-
-embedding_matrix = bert.get_embedding_matrix()
 ```
+To classify sentences with COPUS models:
+
+```python
+from BERT_STEM.BertSTEM import *
+
+# Download BERT for classification (guiding/presenting/administration)
+bert_classification = BertSTEMForTextClassification(2, model_name = 'pablouribe/bertstem-copus-guiding')
+
+# Example dataframe with text in spanish
+data = {'col_1': [3, 2, 1], 
+'col_2': ['hola como estan', 'alumnos queridos', 'vamos a hablar de matematicas']}
+
+df = pd.DataFrame.from_dict(data)
+
+# Classify sentences using BertSTEM for COPUS (Guiding):
+bert_classification.predict(df,'col_2')
+
+```
+
 
 To use it from HuggingFace:
 
